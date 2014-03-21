@@ -1,11 +1,10 @@
 
-This guide describes three functions which a more-privileged JavaScript context can use to expose code to a less-privileged context. For example, they could be used by an add-on's code to share objects and functions with a script running in a normal web page.
+This guide describes two functions which a more-privileged JavaScript context can use to expose code to a less-privileged context. For example, they could be used by an add-on's code to share objects and functions with a script running in a normal web page.
 
 The three functions are:
 
-  `evalInWindow(script, targetWindow)`: from privileged code, safely access variables and APIs defined in less-privileged code
-  `exportFunction(function, targetScope, options)`: export a function into the less-privileged context, and allow it to be called there
-  `createObjectIn(targetScope, options)`: create a named object in the less-privileged context, and allow it to be accessed there
+* `evalInWindow(script, targetWindow)`: from privileged code, safely access variables and APIs defined in less-privileged code
+* `exportFunction(function, targetScope, options)`: export a function into the less-privileged context, and allow it to be called there
 
 ## `evalInWindow` ##
 
