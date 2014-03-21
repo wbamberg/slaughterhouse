@@ -36,11 +36,13 @@ The result of evaluating the script. If this is just native (for example, a DOM 
 If a page script defines a local variable:
 
 [page-script.js]
+
     var someLocalVariable = {name: "selection1", node: document.documentElement};
 
 An add-on script or other privileged script can access the variable. Add-on SDK [content scripts]() get evalInWindow automatically added to their scope, and can access the content window using `window.wrappedJSObject`:
 
 [content-script.js]
+
     var result = evalInWindow("someLocalVariable", window.wrappedJSObject);
     console.log(result);
     // {"name":"selection1","node":{}}
@@ -48,9 +50,11 @@ An add-on script or other privileged script can access the variable. Add-on SDK 
 The add-on code can modify the variable as well, of course:
 
 [content-script.js]
+
     evalInWindow("someLocalVariable.newProp = 42", window.wrappedJSObject);
 
 [page-script.js]
+
     console.log(window.someLocalVariable.newProp);
     // 42
 
@@ -59,12 +63,14 @@ But note that the content script must trust that the page script has not redefin
 If the returned object contains a function, calls to `evalInWindow` will throw an error:
 
 [page-script.js]
+
     function bar() {
     }
 
     var someLocalVariableContainingAFunction = {name: "selection1", foo : bar};
 
 [content-script.js]
+
     evalInWindow("someLocalVariable", window.wrappedJSObject);
     // ERROR, function can't be cloned
 
