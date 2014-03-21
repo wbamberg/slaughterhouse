@@ -1,0 +1,1 @@
+Simple example showing the new APIs for sharing content from a more privileged to a less privileged scope.
