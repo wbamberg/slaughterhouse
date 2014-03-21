@@ -1,4 +1,3 @@
-
 This guide describes two functions which a more-privileged JavaScript context can use to expose code to a less-privileged context. For example, they could be used by an add-on's code to share objects and functions with a script running in a normal web page.
 
 The three functions are:
@@ -9,6 +8,8 @@ The three functions are:
 ## `evalInWindow` ##
 
 This function enables you to evaluate a string in a less-privileged JavaScript context. The result is [structure-cloned](/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm) back to the original context, unless it is native (for example, if it returns a DOM node, this is not structure-cloned, because the original context will see that through an XRayWrapper already).
+
+Nits: 'structured cloned', might worth to mention that the original sc alg. just throws for DOM nodes, so in a way this is an extended version of it...
 
 This is useful for privileged code, such as add-on code, to access variables defined in web content or to access APIs defined in web content.
 
@@ -57,7 +58,18 @@ The add-on code can modify the variable as well, of course:
     console.log(window.someLocalVariable.newProp);
     // 42
 
+Note: instead of window.wrappedJSObject one can simply use window, the function will do the unwrapping dance.
+
 But note that the content script must trust that the page script has not redefined the setter on `someLocalVariable`: unlike XRayWrappers, evalInWindow does not provide x-ray vision.
+
+Note: yes, so this is like calling eval of the window in a safe way, where safe means two things:
+- there is no other way to call eval right now without having to worry about content has already
+replaced eval with some other function.
+- the return value is structured cloned / xrayed, so what we get back from it, is guaranteed to be
+something safe.
+
+and yes, during the eval, we are in content world, so we have to be very carefull about our
+assumptions
 
 If the returned object contains a function, calls to `evalInWindow` will throw an error:
 
@@ -81,6 +93,8 @@ A function exported from privileged to less-privileged code can be called from t
 
 The function does not have to be added to the less privileged code's global window object. The privileged code can use [`createObjectIn`]() to create a new object in the other side, then export the function to that object.
 
+Note: one more thing worth to be mentioned, that during that function call the |this| object from content side will be always ignored
+
 ### Syntax ###
 
     exportFunction(func, targetScope, options)
@@ -91,9 +105,14 @@ The function does not have to be added to the less privileged code's global wind
 
 The function to export. I'm guessing this function can't take functions as arguments?
 
+You are guessing it right. I'm concidering with Bobby to enable simple callback functions as arguments
+with some magic like a reversed version of the exportFunction that happens automatically. But currently this is the case.
+
 **targetScope: object**
 
 The object to attach the function to. This does not have to be the global window object: it could be an object returned by [createObjectIn]().
+
+Or any other object from that scope...
 
 **options: object**
 
@@ -102,6 +121,10 @@ Options. One option is currently defined, `defineAs`, which determines the name 
 ### Returns ###
 
 Not sure.
+
+So there is an original function 'orig' in privileged context A. We create a placeholder function 'exported' in the less privileged context B that does the forwarding magic back to function orig. The return value here is 'exported' the newly crealted placeholder function.
+
+The added sugar is that since we are in context A and this 'exported' guy is from context B there is a transparent cross compartment wrapper around it. But JS developers should not care about this probably.
 
 ### Example ###
 
@@ -116,6 +139,8 @@ If a content script defines a function:
 It can export the function to the content window like this:
 
     exportFunction(greetme, unsafeWindow, {defineAs: "foo"});
+
+Note: no need for unsafeWindow, window is enough.
 
 Code running in the content window's scope can now call the function:
 
