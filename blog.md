@@ -97,7 +97,7 @@ The real fix is to use three new APIs to share objects and functions with web co
 
 ### cloneInto() ###
 
-You can use `cloneInto()` to clone an object from the content script's context into the page script's content.
+You can use `cloneInto()` to clone an object from the content script's context into the page script's context.
 `cloneInto()` creates a [structured clone](#Structured_cloning) of the object in the target context, and returns a reference to the clone. You can then assign that to a property of the target window, and the page script can access it:
 
     // content-script.js
