@@ -6,7 +6,7 @@ Instead, we've provided some new APIs that you can use to share functions and ob
 
 ## Who's affected? ##
 
-Put briefly: *Add-on SDK-based add-ons that use `unsafeWindow` or `window.wrappedJSObject` in content scripts to share JavaScript objects with the scripts loaded by a web page will be broken by this change.*
+*Add-on SDK-based add-ons that use `unsafeWindow` or `window.wrappedJSObject` in content scripts to share JavaScript objects with the scripts loaded by a web page will be broken by this change.*
 
 By default, content scripts and the scripts loaded into web pages are insulated from each other. They can both see the DOM, but content scripts can't access objects defined by page scripts, and page scripts can't access objects defined by content scripts:
 
