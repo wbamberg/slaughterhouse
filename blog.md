@@ -78,7 +78,7 @@ From Firefox 31 onwards, this mechanism won't work any more to share objects fro
 
     window.pageScriptObject = {"greeting" : "hello from web page"};
 
-Note that the use of `unsafeWindow` to access variables defined in the page script are unaffected, so this change is asymmetric. Content scripts can still access page objects using `unsafeWindow`, but not vice versa.
+Note that the use of `unsafeWindow` to access variables defined in the page script are unaffected, so this change is asymmetric. *Content scripts can still access page objects using `unsafeWindow`, but not vice versa.*
 
 If the page script tries to read a variable defined using `unsafeWindow`, it will get the value `undefined`. If it tries to write to such a variable, the browser will throw an exception with this message: "Permission denied to access property [name of the property]".
 
