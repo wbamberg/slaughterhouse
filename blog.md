@@ -136,7 +136,7 @@ You can also assign the reference to an object you've created using `createObjec
 
 You can use `exportFunction()` to expose a function from a content script to a page script. In this way a function defined in a content script can be called by the page script. Any non-native arguments, and the return value, are [cloned](#Structured_cloning) into the page script's context.
 
-You can export the function to the target's window object:
+You can export the function to the target's `window` object:
 
     // content-script.js
     var salutation = "hello, ";
