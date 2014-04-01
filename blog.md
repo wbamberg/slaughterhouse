@@ -181,7 +181,7 @@ You can use `createObjectIn()` to create a new object in the page script's conte
 
 ### Structured cloning ###
 
-These functions use the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm) to clone objects into the page context. This is more capable than JSON serialization, but still has some serious limitations. Most notably, you can't clone functions, so functions that take functions as arguments (such as callbacks) or return values can't be exported to content using `exportFunction()`. However, we're working on adding better support at least for common patterns like callbacks.
+These functions use the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm) to clone objects into the page context. This is more capable than JSON serialization, but still has some serious limitations. Most notably, you can't clone functions, so you can't export functions that take functions as arguments (such as callbacks) and functions that return functions. However, we're working on adding better support at least for common patterns like callbacks.
 
 ## More details ##
 
