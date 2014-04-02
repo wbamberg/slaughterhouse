@@ -1,8 +1,8 @@
 In Firefox 31 the Add-on SDK is making a change to the execution environment for content scripts.
 
-For most add-ons, this won't be visible. However, content scripts will no longer be able to use `unsafeWindow` or `window.wrappedJSObject` to make JavaScript objects available to content.
+WHile this change will not affect most addons, some common patterns will no longer work. Specifically, content scripts will no longer be able to use `unsafeWindow` or `window.wrappedJSObject` to make JavaScript objects available to content. The more common pattern of accessing objects in the page directly via `unsafeWindow` will conitnue to work as expected.
 
-Instead, we've provided some new APIs that you can use to share functions and objects with content explicitly. While you're working on migrating to these new APIs, there's a mechanism you can use to switch your add-on back to the old behavior as a short-term measure.
+What we're introducing instead are some new APIs that you can use to share functions and objects with content explicitly. While you're working on migrating to these new APIs, there's a mechanism you can use to switch your add-on back to the old behavior as a short-term measure.
 
 ## Who's affected? ##
 
@@ -78,11 +78,11 @@ From Firefox 31 onwards, this mechanism won't work any more to share objects fro
 
     window.pageScriptObject = {"greeting" : "hello from web page"};
 
-Note that the use of `unsafeWindow` to access variables defined in the page script are unaffected, so this change is asymmetric. *Content scripts can still access page objects using `unsafeWindow`, but not vice versa.*
+Again, the use of `unsafeWindow` to access variables defined in the page script are unaffected, so this change is asymmetric. *Content scripts can still access page objects using `unsafeWindow`, but not vice versa.*
 
 If the page script tries to read a variable defined using `unsafeWindow`, it will get the value `undefined`. If it tries to write to such a variable, the browser will throw an exception with this message: "Permission denied to access property [name of the property]".
 
-## How can I fix this? ##
+## Workaround ##
 
 In the short term, there's a new option in `package.json` called "unsafe-content-script" under the "permissions" key. By setting it to `true` you can revert to the old behavior:
 
